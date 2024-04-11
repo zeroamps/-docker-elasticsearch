@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
     container_name: elasticsearch
     ports:
       - "9200:9200"
@@ -9,8 +9,17 @@ services:
     environment:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=123456
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:8.13.2
+    container_name: apm-server
+    ports:
+      - "8200:8200"
+    volumes:
+      - "./apm-server.docker.yml:/usr/share/apm-server/apm-server.yml:ro"
+    depends_on:
+      - elasticsearch
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.12.2
+    image: docker.elastic.co/kibana/kibana:8.13.0
     container_name: kibana
     ports:
       - "5601:5601"
